@@ -10,12 +10,16 @@ if backend_dir not in sys.path:
 from app.rag.chroma_manager import chroma_manager
 from app.logging_config import logger
 
-try:
-    from sentence_transformers import SentenceTransformer
-    EMBEDDINGS_AVAILABLE = True
-except ImportError:
+if os.environ.get("LIGHTWEIGHT_MODE", "false").lower() == "true" or os.environ.get("ENVIRONMENT", "development").lower() == "production":
     EMBEDDINGS_AVAILABLE = False
-    logger.warning("sentence-transformers not available. Embeddings generation will run in fallback mock mode.")
+    logger.info("SentenceTransformer library import bypassed due to LIGHTWEIGHT_MODE/production environment.")
+else:
+    try:
+        from sentence_transformers import SentenceTransformer
+        EMBEDDINGS_AVAILABLE = True
+    except ImportError:
+        EMBEDDINGS_AVAILABLE = False
+        logger.warning("sentence-transformers not available. Embeddings generation will run in fallback mock mode.")
 
 class DocIngestor:
     def __init__(self):

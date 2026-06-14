@@ -2,12 +2,16 @@ import os
 from app.config import settings
 from app.logging_config import logger
 
-try:
-    import chromadb
-    CHROMA_AVAILABLE = True
-except ImportError:
+if os.environ.get("LIGHTWEIGHT_MODE", "false").lower() == "true" or os.environ.get("ENVIRONMENT", "development").lower() == "production":
     CHROMA_AVAILABLE = False
-    logger.warning("ChromaDB library not found. RAG queries will fallback to standard text mapping index.")
+    logger.info("ChromaDB library import bypassed due to LIGHTWEIGHT_MODE/production environment.")
+else:
+    try:
+        import chromadb
+        CHROMA_AVAILABLE = True
+    except ImportError:
+        CHROMA_AVAILABLE = False
+        logger.warning("ChromaDB library not found. RAG queries will fallback to standard text mapping index.")
 
 class ChromaManager:
     def __init__(self):
