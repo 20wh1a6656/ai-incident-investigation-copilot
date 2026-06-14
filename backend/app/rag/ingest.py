@@ -20,14 +20,17 @@ except ImportError:
 class DocIngestor:
     def __init__(self):
         self.encoder = None
-        if EMBEDDINGS_AVAILABLE:
+
+    def get_encoder(self):
+        if self.encoder is None and EMBEDDINGS_AVAILABLE:
             try:
-                # Load a small, fast local embedding model
+                logger.info("DocIngestor: Lazy loading SentenceTransformer model...")
                 self.encoder = SentenceTransformer("all-MiniLM-L6-v2")
                 logger.info("DocIngestor: SentenceTransformer model loaded successfully.")
             except Exception as e:
                 logger.error(f"DocIngestor: Failed to load sentence-transformers model: {str(e)}")
                 self.encoder = None
+        return self.encoder
 
     def ingest_document(self, doc_id: str, title: str, content: str, source: str) -> bool:
         collection = chroma_manager.get_collection()
@@ -38,8 +41,9 @@ class DocIngestor:
         try:
             # Generate real embeddings if encoder model is loaded
             embeddings = None
-            if self.encoder:
-                embeddings = self.encoder.encode(content).tolist()
+            encoder = self.get_encoder()
+            if encoder:
+                embeddings = encoder.encode(content).tolist()
 
             metadata = {
                 "title": title,

@@ -12,8 +12,7 @@ from app.logging_config import logger
 
 class DocumentRetriever:
     def __init__(self):
-        # Share sentence-transformers encoder from doc_ingestor
-        self.encoder = doc_ingestor.encoder
+        pass
 
     def retrieve_relevant_docs(self, query: str, limit: int = 3) -> list[dict]:
         collection = chroma_manager.get_collection()
@@ -23,8 +22,9 @@ class DocumentRetriever:
 
         try:
             # Generate query embeddings if SentenceTransformer is active
-            if self.encoder:
-                query_embeddings = self.encoder.encode(query).tolist()
+            encoder = doc_ingestor.get_encoder()
+            if encoder:
+                query_embeddings = encoder.encode(query).tolist()
                 results = collection.query(
                     query_embeddings=[query_embeddings],
                     n_results=limit
