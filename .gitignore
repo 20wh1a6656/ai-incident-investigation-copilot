@@ -1,0 +1,49 @@
+# Virtual Environment
+backend/venv/
+venv/
+ENV/
+env/
+
+# Dependency Directories
+node_modules/
+frontend/node_modules/
+
+# Production Builds
+dist/
+frontend/dist/
+build/
+out/
+
+# Python Cache & Tests
+__pycache__/
+**/__pycache__/
+.pytest_cache/
+.tox/
+*.pyc
+*.pyo
+*.pyd
+
+# Local Database Files
+*.db
+*.sqlite
+*.sqlite3
+data/incidents.db
+data/chroma_db/
+backend/pipeline_test.db
+backend/debug_pipeline.db
+backend/audit_incidents.db
+pipeline_test.db
+test_incidents.db
+
+# Environments and Secrets
+.env
+backend/.env
+frontend/.env
+.env.local
+.env.*.local
+
+# IDEs & OS Files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
