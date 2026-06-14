@@ -152,7 +152,7 @@ class IncidentAnalysisAgent:
         runner_pct = candidates[1]["percentage"] if len(candidates) > 1 else 0
 
         # Apply new confidence rules
-        if max_sim < 53 or supporting_cnt <= 1:
+        if max_sim < 48 or supporting_cnt <= 1:
             # Low Confidence (0-49%): Weak matches or ambiguous symptoms
             confidence_tier = "Low"
             confidence = 35

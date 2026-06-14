@@ -1,8 +1,11 @@
 import axios from 'axios';
 
+const isProd = import.meta.env.PROD;
+const baseURL = isProd ? 'https://ai-incident-investigation-copilot.onrender.com/api' : '/api';
+
 // The Vite server proxy forwards /api calls to http://localhost:8000
 const API = axios.create({
-  baseURL: 'https://incident-copilot-backend.onrender.com/api',
+  baseURL,
   timeout: 25000, // Multi-agent execution and RAG lookups can take a few seconds
   headers: {
     'Content-Type': 'application/json',
